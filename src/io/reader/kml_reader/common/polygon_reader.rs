@@ -2,7 +2,7 @@ use regex::Regex;
 use crate::geometry::coord::Coord;
 
 use crate::geometry::polygon::Polygon;
-use crate::io::reader::kml_reader::common::coords_reader::CoordsReader;
+use crate::io::reader::kml_reader::common::coord_reader::CoordsReader;
 use crate::io::reader::reader::Reader;
 
 pub struct PolygonReader {}

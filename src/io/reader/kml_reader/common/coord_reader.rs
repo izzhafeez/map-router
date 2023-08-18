@@ -7,14 +7,16 @@ impl Reader<Vec<Coord>> for CoordsReader {
     fn read(string: &str) -> Vec<Coord> {
         string
             .split(" ")
-            .filter_map(|coord_str| CoordsReader::read_coord(coord_str).ok())
+            .map(CoordReader::read)
             .collect()
     }
 }
 
-impl CoordsReader {
-    fn read_coord(coord_str: &str) -> Result<Coord, ()> {
-        let mut coord_iter = coord_str.split(",");
+struct CoordReader {}
+
+impl Reader<Coord> for CoordReader {
+    fn read(string: &str) -> Coord {
+        let mut coord_iter = string.split(",");
 
         let lat: f32 = coord_iter
             .next()
@@ -34,6 +36,6 @@ impl CoordsReader {
             .parse::<f32>()
             .expect("Alt is not a float.");
 
-        Ok(Coord::new(lat, lng, alt))
+        Coord::new(lat, lng, alt)
     }
 }
