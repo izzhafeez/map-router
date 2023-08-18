@@ -10,7 +10,7 @@ pub struct SubzoneReader {}
 
 impl Reader<Subzone> for SubzoneReader {
     fn read(string: &str) -> Subzone {
-        let information_str_regex: Regex = Regex::new("<ExtendedData>(?<information_str>.*?)</ExtendedData>(?<geometry_str>.*?)").unwrap();
+        let information_str_regex: Regex = Regex::new("<ExtendedData>(?<information_str>.*?)</ExtendedData>(?<geometry_str>.*?)</Placemark>").unwrap();
         let capture: Captures = information_str_regex.captures(string).unwrap();
         let information_str: &str = capture.name("information_str").unwrap().as_str();
         let geometry_str: &str = capture.name("geometry_str").unwrap().as_str();
