@@ -12,6 +12,5 @@ mod geometry;
 
 fn main() {
     let text: String = FileReader::read("./src/data/master-plan-2019-subzone-boundary-no-sea-kml.kml");
-    let subzones: Kml = SubzoneKmlReader::read(&text);
-    println!("{}", subzones);
+    let subzones: Kml = SubzoneKmlReader::read(&text.replace("\n", ""));
 }
