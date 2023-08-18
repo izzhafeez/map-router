@@ -18,7 +18,7 @@ impl Reader<ShapeEnum> for ShapeReader {
             None => {
                 let (_, [polygon_str]) = poly_pattern_str
                     .captures(string)
-                    .unwrap()
+                    .expect("Polygon string capture failed.")
                     .extract();
                 ShapeEnum::Polygon(PolygonReader::read(polygon_str))
             }
