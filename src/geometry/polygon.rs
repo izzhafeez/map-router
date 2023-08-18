@@ -1,9 +1,11 @@
+use std::fmt::{Display, Formatter};
 use serde::{Serialize, Deserialize};
 use std::vec::IntoIter;
 use crate::geometry::coord::Coord;
 use crate::geometry::geometry::Geometry;
+use crate::geometry::shape::Shape;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Polygon {
     inner_boundaries: Vec<Polygon>,
     outer_boundary: Vec<Coord>
@@ -30,3 +32,15 @@ impl Polygon {
 }
 
 impl Geometry for Polygon {}
+
+impl Shape for Polygon {
+    fn is_in(&self) {
+        todo!()
+    }
+}
+
+impl Display for Polygon {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "(Inner: {:?}, Outer: {:?})", self.inner_boundaries, self.outer_boundary)
+    }
+}
