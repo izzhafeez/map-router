@@ -10,7 +10,7 @@ pub struct SubzoneKmlReader {}
 
 impl KmlReader<Kml> for SubzoneKmlReader {
     fn get_pattern() -> Regex {
-        Regex::new(r"<Placemark id=(?P<data>.*?)</Placemark>").expect("Invalid regex given.")
+        Regex::new("(?P<data><Placemark.*?</Placemark>)").expect("Invalid regex given.")
     }
 }
 
@@ -23,7 +23,6 @@ impl Reader<Kml> for SubzoneKmlReader {
                 capture.name("data").unwrap().as_str()
             })
             .collect();
-        println!("{:?}", reg_exp.captures(string));
 
         let subzones: HashMap<String, Subzone> = subzones_str
             .into_iter()
