@@ -1,9 +1,10 @@
 use std::fmt::{Display, Formatter};
+use serde::{Serialize, Deserialize};
 use crate::feature::feature::Feature;
 use crate::geometry::geometry::Geometry;
 use crate::geometry::shape::ShapeEnum;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Subzone {
     id: i16,
     name: String,

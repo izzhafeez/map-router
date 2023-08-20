@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use regex::{Captures, Regex};
-use crate::feature::subzone::subzone::Subzone;
+use crate::feature::shape::planning_area::PlanningArea;
+use crate::feature::shape::region::Region;
+use crate::feature::shape::subzone::Subzone;
 use crate::geometry::shape::ShapeEnum;
 use crate::io::reader::kml_reader::common::field_reader::FieldsReader;
 use crate::io::reader::kml_reader::common::shape_reader::ShapeReader;
@@ -8,8 +10,8 @@ use crate::io::reader::reader::Reader;
 
 pub struct SubzoneReader {}
 
-impl Reader<Subzone> for SubzoneReader {
-    fn read(string: &str) -> Subzone {
+impl Reader<Region> for SubzoneReader {
+    fn read(string: &str) -> Region {
         let information_str_regex: Regex = Regex::new("<ExtendedData>(?<information_str>.*?)</ExtendedData>(?<geometry_str>.*?)</Placemark>").unwrap();
         let capture: Captures = information_str_regex.captures(string).unwrap();
         let information_str: &str = capture.name("information_str").unwrap().as_str();
@@ -48,6 +50,10 @@ impl Reader<Subzone> for SubzoneReader {
 
         let geometry: ShapeEnum = ShapeReader::read(geometry_str);
 
-        Subzone::new(id, name, code, planning_area, planning_area_code, region, region_code, geometry)
+
+        let subzone: Subzone = Subzone::new(id, name, code, geometry);
+        let planning_area: PlanningArea = PlanningArea::new(planning_area, planning_area_code, vec![subzone]);
+        let region: Region = Region::new(region, region_code, vec![planning_area]);
+        region
     }
 }
