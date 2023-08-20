@@ -8,10 +8,10 @@ use crate::io::reader::kml_reader::common::field_reader::FieldsReader;
 use crate::io::reader::kml_reader::common::shape_reader::ShapeReader;
 use crate::io::reader::reader::Reader;
 
-pub struct SubzoneReader {}
+pub struct RegionReader {}
 
-impl Reader<Region> for SubzoneReader {
-    fn read(string: &str) -> Region {
+impl Reader<(String, Region)> for RegionReader {
+    fn read(string: &str) -> (String, Region) {
         let information_str_regex: Regex = Regex::new("<ExtendedData>(?<information_str>.*?)</ExtendedData>(?<geometry_str>.*?)</Placemark>").unwrap();
         let capture: Captures = information_str_regex.captures(string).unwrap();
         let information_str: &str = capture.name("information_str").unwrap().as_str();
@@ -31,7 +31,7 @@ impl Reader<Region> for SubzoneReader {
             .get("SUBZONE_C")
             .expect("Subzone has no code.")
             .to_string();
-        let planning_area: String = fields
+        let planning_area_name: String = fields
             .get("PLN_AREA_N")
             .expect("Subzone has no planning area.")
             .to_string();
@@ -39,7 +39,7 @@ impl Reader<Region> for SubzoneReader {
             .get("PLN_AREA_C")
             .expect("Subzone has no planning area code.")
             .to_string();
-        let region: String = fields
+        let region_name: String = fields
             .get("REGION_N")
             .expect("Subzone has no region.")
             .to_string();
@@ -51,9 +51,15 @@ impl Reader<Region> for SubzoneReader {
         let geometry: ShapeEnum = ShapeReader::read(geometry_str);
 
 
-        let subzone: Subzone = Subzone::new(id, name, code, geometry);
-        let planning_area: PlanningArea = PlanningArea::new(planning_area, planning_area_code, vec![subzone]);
-        let region: Region = Region::new(region, region_code, vec![planning_area]);
-        region
+        let subzone: Subzone = Subzone::new(id, name, geometry);
+        let planning_area: PlanningArea = PlanningArea::new(
+            planning_area_name,
+            HashMap::from([(code, subzone)])
+        );
+        let region: Region = Region::new(
+            region_name,
+            HashMap::from([(planning_area_code, planning_area)])
+        );
+        (region_code, region)
     }
 }
