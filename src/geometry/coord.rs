@@ -6,12 +6,11 @@ use crate::geometry::geometry::Geometry;
 pub struct Coord {
     lat: f32,
     lng: f32,
-    alt: f32
 }
 
 impl Coord {
-    pub fn new(lat: f32, lng: f32, alt: f32) -> Self {
-        Self { lat, lng, alt }
+    pub fn new(lat: f32, lng: f32, _alt: f32) -> Self {
+        Self { lat, lng }
     }
 }
 
@@ -19,6 +18,6 @@ impl Geometry for Coord {}
 
 impl Display for Coord {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "({}, {}, {})", self.lat, self.lng, self.alt)
+        write!(f, "({}, {})", self.lat, self.lng)
     }
 }
